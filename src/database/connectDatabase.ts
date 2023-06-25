@@ -11,6 +11,7 @@ const connectDatabase = async (url: string) => {
       delete returnedObject.__v;
     },
   });
+
   await mongoose.connect(url);
 };
 

@@ -10,7 +10,7 @@ import statusCodes from "../../utils/statusCodes";
 import { mockUserCredentials } from "../../../mocks/userMocks";
 
 const {
-  success: { okCode },
+  success: { okCode, resourceCreated },
   clientError: { unauthorized },
   serverError: { internalServer },
 } = statusCodes;
@@ -197,7 +197,7 @@ describe("Given the registerUser controller", () => {
         next
       );
 
-      expect(res.status).toHaveBeenCalledWith(okCode);
+      expect(res.status).toHaveBeenCalledWith(resourceCreated);
       expect(res.json).toHaveBeenCalledWith(expectedResponseBody);
     });
   });

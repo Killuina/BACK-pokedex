@@ -9,7 +9,7 @@ import { type CustomJwtPayload } from "./types";
 import statusCodes from "../../utils/statusCodes.js";
 
 const {
-  success: { okCode },
+  success: { okCode, resourceCreated },
   serverError: { internalServer },
 } = statusCodes;
 
@@ -69,7 +69,7 @@ export const registerUser = async (
       password: hashedPassword,
     });
 
-    res.status(okCode).json({ message: `${username} registered!` });
+    res.status(resourceCreated).json({ message: `${username} registered!` });
   } catch {
     const registerUserError = new CustomError(
       "Error on the database",

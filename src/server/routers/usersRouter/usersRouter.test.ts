@@ -9,15 +9,16 @@ import { type UserCredentials, type UserLoginCredentials } from "../../types";
 import { app } from "../..";
 import statusCodes from "../../utils/statusCodes";
 import { paths } from "../../utils/paths";
+import { mockUserCredentials } from "../../../mocks/userMocks";
 
 const {
-  success: { okCode },
+  success: { okCode, resourceCreated },
   clientError: { unauthorized },
 } = statusCodes;
 
 const {
   users: {
-    endpoints: { login },
+    endpoints: { login, register },
     usersPath,
   },
 } = paths;
@@ -61,7 +62,7 @@ describe("Given the POST /users/login endpoint", () => {
     });
   });
 
-  describe("When it receives a request with a user with username 'notDiana' and password '123456789888' and the password isnt correct", () => {
+  describe("When it receives a request with a user with username 'notDiana' and password '123456789888' and the password isn't correct", () => {
     test("Then it should respond with status 401 and error: 'Wrong Credentials'", async () => {
       const userLoginCredentialsWithWrongPassword: UserLoginCredentials = {
         username: "notDiana",
@@ -75,6 +76,21 @@ describe("Given the POST /users/login endpoint", () => {
         .expect(unauthorized);
 
       expect(response.body).toHaveProperty("error", expectedMessage);
+    });
+  });
+});
+
+describe("Given the POST /users/register endpoint", () => {
+  describe("When it receives a request with email: test@test.com, username: 'test', and password 'test1234'", () => {
+    test("Then it should respond with status 201 and message 'test registered!'", async () => {
+      const expectedMessage = `${mockUserCredentials.username} registered!`;
+
+      const response = await request(app)
+        .post(`${usersPath}${register}`)
+        .send(mockUserCredentials)
+        .expect(resourceCreated);
+
+      expect(response.body).toHaveProperty("message", expectedMessage);
     });
   });
 });
